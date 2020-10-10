@@ -1,4 +1,3 @@
-
 from mininet.net import Mininet
 from mininet.node import Controller, RemoteController
 from mininet.cli import CLI
@@ -38,7 +37,7 @@ class Fattree(Topo):
 		self.createEdgeLayerSwitch(self.iEdgeLayerSwitch)
 		self.createHost(self.iHost)
 
-	# Create Switch and Host
+	# Create Switch (Core, Agg, and Edge)
 	def _addSwitch(self, number, level, switch_list):
 		"""
 			Create switches.
@@ -58,6 +57,7 @@ class Fattree(Topo):
 	def createEdgeLayerSwitch(self, NUMBER):
 		self._addSwitch(NUMBER, 3, self.EdgeSwitchList)
 
+        # Create Host
 	def createHost(self, NUMBER):
 		"""
 			Create hosts.
@@ -173,6 +173,7 @@ def install_proactive(net, topo):
                         # Set the OpenFlow version to OpenFlow13
                         # Add a flow to table 0 that matches ethernet protocol type = arp
                         # Packets are output to a different port
+                        # Flows with Higher priority will match instead of flows with lower priority
 			cmd = "ovs-ofctl add-flow %s -O OpenFlow13 \
 				'table=0,idle_timeout=0,hard_timeout=0,priority=40,arp, \
 				nw_dst=10.%d.0.%d,actions=output:%d'" % (sw, num, i, topo.pod/2+i)
@@ -208,6 +209,7 @@ def install_proactive(net, topo):
 		os.system(cmd)
 
 	# Aggregate Switch
+        # Most command are similar to the above.
 	for sw in topo.AggSwitchList:
 		num = int(sw[-2:])
 		subnetList = create_subnetList(topo, num)
