@@ -12,7 +12,3 @@
 - line 279 - 283, for ping test: pingall
 - line 285 -312, start crerating topo
 
----
-This code is from https://github.com/Huangmachi/ECMP, above is a outline for the code.
-And I add some comments inside the code.
-
